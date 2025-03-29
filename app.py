@@ -53,3 +53,43 @@ if __name__ == '__main__':
     app.run(debug=True, port=5001)
 
 
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+# Demo bus data
+bus_data = [
+    {"bus_id": 1, "arrival_time": "10:30 AM", "available_seats": 5},
+    {"bus_id": 2, "arrival_time": "11:00 AM", "available_seats": 12},
+    {"bus_id": 3, "arrival_time": "11:45 AM", "available_seats": 8},
+]
+
+@app.route('/buses', methods=['GET'])
+def get_buses():
+    return jsonify(bus_data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+from flask import Flask, render_template, jsonify
+import random
+
+app = Flask(__name__)
+
+# Demo bus data with route, location, and traffic info
+bus_data = [
+    {"bus_id": 1, "route": "Route A", "lat": 19.0760, "lon": 72.8777, "arrival_time": "10:30 AM", "available_seats": 5, "traffic": "Moderate"},
+    {"bus_id": 2, "route": "Route B", "lat": 18.5204, "lon": 73.8567, "arrival_time": "11:00 AM", "available_seats": 12, "traffic": "Heavy"},
+    {"bus_id": 3, "route": "Route C", "lat": 28.7041, "lon": 77.1025, "arrival_time": "11:45 AM", "available_seats": 8, "traffic": "Light"},
+]
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/buses', methods=['GET'])
+def get_buses():
+    return jsonify(bus_data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
