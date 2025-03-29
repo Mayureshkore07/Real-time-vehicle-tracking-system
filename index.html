@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Bus Tracking</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map { height: 500px; }
+    </style>
+</head>
+<body>
+    <h2>Real-Time Bus Tracking System</h2>
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([19.0760, 72.8777], 6); // Default location
+
+        // Load OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        function fetchBusData() {
+            $.getJSON("/buses", function(data) {
+                data.forEach(bus => {
+                    L.marker([bus.lat, bus.lon])
+                     .addTo(map)
+                     .bindPopup(`<b>Bus ID:</b> ${bus.bus_id}<br>
+                                 <b>Route:</b> ${bus.route}<br>
+                                 <b>Arrival Time:</b> ${bus.arrival_time}<br>
+                                 <b>Seats Available:</b> ${bus.available_seats}<br>
+                                 <b>Traffic:</b> ${bus.traffic}`);
+                });
+            });
+        }
+
+        fetchBusData();
+        setInterval(fetchBusData, 5000); // Refresh every 5 seconds
+    </script>
+</body>
+</html>
